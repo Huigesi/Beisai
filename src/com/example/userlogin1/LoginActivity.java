@@ -10,6 +10,12 @@ public class LoginActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		init();
+	}
+
+	private void init() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
