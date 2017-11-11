@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +22,8 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 	private CheckBox jizhu;
 	private TextView register;
 	private TextView findpwd;
+	SharedPreferences preferences;
+	Editor editor;
 	
 
 	@Override
@@ -52,6 +56,17 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 		jizhu.setOnClickListener(this);
 		register.setOnClickListener(this);
 		findpwd.setOnClickListener(this);
+		preferences=getSharedPreferences("UserInfo",MODE_PRIVATE);
+		editor=preferences.edit();
+		String name=preferences.getString("name", "");
+		String psw=preferences.getString("psw", "");
+		if(name==null||psw==null){
+			jizhu.setChecked(false);
+		}else {
+			//jizhu.setChecked(true);
+			usernameET.setText(name);
+			passwordET.setText(psw);
+		}
 	}
 
 	@Override
@@ -63,16 +78,22 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 				
 				break;
 			case R.id.login:
-				
 				String username = usernameET.getText().toString().trim();
 				String password = passwordET.getText().toString().trim();
-				if(username.equals("")||password.equals("")){
-					Toast.makeText(this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
+				if(username.equals("admin")||password.equals("123456")){
+					if(jizhu.isChecked()){
+						editor.putString("name", username);
+						editor.putString("psw",password);
+						editor.commit();
+					}else{
+						editor.remove("name");
+						editor.remove("psw");
+						editor.commit();
+					}
 				}else {
-					AlertDialog.Builder aDialog=new AlertDialog.Builder(this);
-					aDialog.setMessage(username+"\n"+password);
-					aDialog.show();
+					Toast.makeText(this, "用户名密码不准确", Toast.LENGTH_SHORT).show();
 				}
+				Toast.makeText(this, "登陆成功", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.jizhu:
 				jizhu.isChecked();
@@ -89,6 +110,21 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 						String regex1="[0-9]{6,12}+";
 						String regex2="[a-zA-Z0-9]{3,6}+";
 						String regex3="[a-zA-Z_]{1,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\\.){1,3}[a-zA-z\\-]{1,}";
+						if(rgusername.matches(regex1)){
+							
+						}else{
+							Toast.makeText(LoginActivity.this, "用户名必须为6-12位纯字母", Toast.LENGTH_SHORT).show();
+						}
+						if(rgpassword.matches(regex2)){
+							
+						}else{
+							Toast.makeText(LoginActivity.this, "密码必须为3-6位字母与数字组合", Toast.LENGTH_SHORT).show();
+						}
+						if(rgemail.matches(regex3)){
+							
+						}else{
+							Toast.makeText(LoginActivity.this, "邮箱格式不准确", Toast.LENGTH_SHORT).show();
+						}
 						
 						
 					}
