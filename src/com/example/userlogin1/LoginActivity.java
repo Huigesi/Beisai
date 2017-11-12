@@ -58,8 +58,8 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 		findpwd.setOnClickListener(this);
 		preferences=getSharedPreferences("UserInfo",MODE_PRIVATE);
 		editor=preferences.edit();
-		String name=preferences.getString("name", "");
-		String psw=preferences.getString("psw", "");
+		String name=preferences.getString("name", null);
+		String psw=preferences.getString("psw", null);
 		if(name==null||psw==null){
 			jizhu.setChecked(false);
 		}else {
